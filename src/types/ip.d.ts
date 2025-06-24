@@ -1,4 +1,5 @@
 export interface IPResponse {
+  id: string;
   query: string;
   ip: string;
   country: string;
