@@ -15,6 +15,9 @@ export default function RootLayout({
       <body
         className={'h-screen'}
       >
+        <header className='sticky top-0 bg-black text-white text-4xl text-center w-full'>
+          <h1>IP Lookup</h1>
+        </header>
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>

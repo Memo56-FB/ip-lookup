@@ -39,20 +39,24 @@ const page = () => {
   }, [state])
 
   return (
-    <main className='grid place-items-center h-full gap-8'>
+    <main className='grid place-items-center h-full gap-8 w-screen pt-20'>
       <form action={formAction} className='flex gap-4'>
         <Input name="ip" placeholder="Ingresa una IP..." className="max-w-xs" required />
         <Button type="submit" disabled={isPending}>Buscar</Button>
       </form>
       {state.data &&
         <>
-          <IPSummary data={state.data} />
+          <div className='p-4 max-w-full'>
+            <IPSummary data={state.data} />
+          </div>
           <div >
             <MapClient position={[state.data?.lat, state.data?.lon]} />
           </div>
         </>
       }
-      <DataTable columns={columns} data={data} />
+      <div className='scroll-auto max-w-screen p-4'>
+        <DataTable columns={columns} data={data} />
+      </div>
     </main>
   )
 }
