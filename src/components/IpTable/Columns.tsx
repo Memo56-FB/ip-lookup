@@ -3,7 +3,7 @@
 import { IPResponse } from "@/types/ip"
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "../ui/button"
-import { Trash } from "lucide-react"
+import { Router, Trash } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -13,9 +13,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { DialogClose } from "@radix-ui/react-dialog"
+import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 export const columns: ColumnDef<IPResponse>[] = [
   {
     accessorKey: "id",
+    header: "ID",
     enableHiding: false
   },
   {
@@ -53,11 +56,27 @@ export const columns: ColumnDef<IPResponse>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const queryClient = useQueryClient()
+      const [open, setOpen] = useState(false)
+
+      const deleteIp = async (id: string) => {
+        const res = await fetch('api/deleteIp', {
+          method: 'DELETE',
+          body: JSON.stringify({ id }),
+        })
+        const data = await res.json()
+        if (data.status === 200) {
+          setOpen(prev => !prev)
+          queryClient.invalidateQueries({
+            queryKey: ['ips']
+          })
+        }
+      }
 
       return (
-        <Dialog>
+        <Dialog onOpenChange={setOpen} open={open}>
           <DialogTrigger asChild>
-            <Button onClick={() => console.log(row.original.id)} variant={'destructive'}>
+            <Button variant={'destructive'}>
               <Trash />
             </Button>
           </DialogTrigger>
@@ -74,7 +93,7 @@ export const columns: ColumnDef<IPResponse>[] = [
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button variant={'destructive'}>
+              <Button variant={'destructive'} onClick={() => deleteIp(row.original.id)}>
                 Borrar
               </Button>
             </div>

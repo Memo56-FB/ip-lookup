@@ -41,3 +41,7 @@ export async function searchIp(prevState: searchIpState, formData: FormData): Pr
 export async function getAllIps(): Promise<IPResponse[]> {
   return await sql`SELECT * FROM ip_queries ORDER BY queried_at DESC` as IPResponse[]
 }
+
+export async function deleteIp(id: number) {
+  return await sql`DELETE FROM ip_queries WHERE id=${id}`
+}

@@ -5,6 +5,7 @@ import { DataTable } from '@/components/IpTable/DataTable'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { searchIp, searchIpState } from '@/lib/actions'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { startTransition, useActionState, useEffect, useState } from 'react'
 
 const page = () => {
@@ -16,10 +17,21 @@ const page = () => {
   const [state, formAction, isPending] = useActionState(searchIp, initialState)
   const [data, setData] = useState([])
 
+  const queryClient = useQueryClient()
+
+  const getIps = async () => {
+    const res = await fetch('/api/getAllIps')
+    setData(await res.json())
+  }
+
+  useQuery({
+    queryKey: ['ips'],
+    queryFn: getIps
+  })
+
   useEffect(() => {
-    startTransition(async () => {
-      const res = await fetch('/api/getAllIps')
-      setData(await res.json())
+    queryClient.invalidateQueries({
+      queryKey: ['ips']
     })
   }, [state])
 
