@@ -8,6 +8,9 @@ import { searchIp, searchIpState } from '@/lib/actions'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { startTransition, useActionState, useEffect, useState } from 'react'
 
+import dynamic from 'next/dynamic';
+const MapClient = dynamic(() => import('@/components/Map'), { ssr: false });
+
 const page = () => {
   const initialState: searchIpState = {
     errorMessage: '',
@@ -36,13 +39,18 @@ const page = () => {
   }, [state])
 
   return (
-    <main className='grid place-items-center h-full'>
+    <main className='grid place-items-center h-full gap-8'>
       <form action={formAction} className='flex gap-4'>
         <Input name="ip" placeholder="Ingresa una IP..." className="max-w-xs" required />
         <Button type="submit" disabled={isPending}>Buscar</Button>
       </form>
       {state.data &&
-        <IPSummary data={state.data} />
+        <>
+          <IPSummary data={state.data} />
+          <div >
+            <MapClient position={[state.data?.lat, state.data?.lon]} />
+          </div>
+        </>
       }
       <DataTable columns={columns} data={data} />
     </main>
