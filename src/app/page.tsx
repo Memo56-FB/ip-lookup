@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { searchIp, searchIpState } from '@/lib/actions'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import React, { startTransition, useActionState, useEffect, useState } from 'react'
+import React, { useActionState, useEffect, useState } from 'react'
 
 import dynamic from 'next/dynamic';
 const MapClient = dynamic(() => import('@/components/Map'), { ssr: false });
