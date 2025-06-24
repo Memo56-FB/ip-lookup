@@ -1,10 +1,12 @@
 export interface IPResponse {
   query: string;
-  status: string;
+  ip: string;
   country: string;
-  regionName: string;
+  region: string;
   city: string;
   lat: number;
   lon: number;
   isp: string;
+  zip: string;
+  regionName: string;
 }

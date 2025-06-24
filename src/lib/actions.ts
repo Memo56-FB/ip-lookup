@@ -8,7 +8,7 @@ export type searchIpState = {
   data?: IPResponse
 } 
 
-async function searchIp(prevState: searchIpState, formData: FormData): Promise<searchIpState> {
+export async function searchIp(prevState: searchIpState, formData: FormData): Promise<searchIpState> {
   const ip = formData.get("ip")?.toString().trim()
 
   if (!ip) return prevState
@@ -22,11 +22,11 @@ async function searchIp(prevState: searchIpState, formData: FormData): Promise<s
   }
 
   try {
-    const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,lat,lon,isp,query`);
+    const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,lat,lon,isp,query,zip`);
     const data = await response.json();
     await sql`
-      INSERT INTO ip_queries (ip, country, region, city, isp, lat, lon)
-      VALUES(${data.query}, ${data.country}, ${data.regionName}, ${data.city}, ${data.isp}, ${data.lat}, ${data.lon})
+      INSERT INTO ip_queries (ip, country, region, city, isp, lat, lon, zip)
+      VALUES(${data.query}, ${data.country}, ${data.regionName}, ${data.city}, ${data.isp}, ${data.lat}, ${data.lon}, ${data.zip})
     `
     return {
       data: data
@@ -38,4 +38,6 @@ async function searchIp(prevState: searchIpState, formData: FormData): Promise<s
   }
 }
 
-export default searchIp
+export async function getAllIps(): Promise<IPResponse[]> {
+  return await sql`SELECT * FROM ip_queries ORDER BY queried_at DESC` as IPResponse[]
+}
