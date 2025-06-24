@@ -55,7 +55,7 @@ const page = () => {
           <div className='p-4 max-w-full'>
             <IPSummary data={state.data} />
           </div>
-          <div >
+          <div>
             <MapClient position={[state.data?.lat, state.data?.lon]} />
           </div>
         </>
