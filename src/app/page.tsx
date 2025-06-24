@@ -9,6 +9,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import React, { useActionState, useEffect, useState } from 'react'
 
 import dynamic from 'next/dynamic';
+import { toast } from 'sonner'
 const MapClient = dynamic(() => import('@/components/Map'), { ssr: false });
 
 const page = () => {
@@ -36,6 +37,11 @@ const page = () => {
     queryClient.invalidateQueries({
       queryKey: ['ips']
     })
+
+    if(state.errorMessage === 'IP duplicada') {
+      toast.warning(state.errorMessage + ' no se agregara a la base de datos')
+    }
+
   }, [state])
 
   return (

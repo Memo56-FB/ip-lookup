@@ -2,6 +2,7 @@
 import "./globals.css";
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
       <body
         className={'h-screen'}
       >
+        <Toaster />
         <header className='sticky top-0 bg-black text-white text-4xl text-center w-full'>
           <h1>IP Lookup</h1>
         </header>
